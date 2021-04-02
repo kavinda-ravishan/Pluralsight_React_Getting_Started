@@ -1,14 +1,29 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+//import App from './App';
+import reportWebVitals from "./reportWebVitals";
 
+/*
 ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
   document.getElementById('root')
+);
+*/
+
+function Button() {
+  //return React.createElement("button", null, "TEST");
+  //same
+  return <button>TEST</button>;
+}
+
+ReactDOM.render(
+  //React.createElement(Button, null),
+  //same
+  <Button />,
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
