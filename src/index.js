@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 //import App from './App';
@@ -14,17 +14,19 @@ ReactDOM.render(
 */
 
 function Button() {
-  //return React.createElement("button", null, "TEST");
-  //same
-  return <button>TEST</button>;
+  const [counter, setCounter] = useState(0); //init value 0 //Hook
+  return (
+    <button
+      onClick={() => {
+        setCounter(counter + 1);
+      }}
+    >
+      {counter}
+    </button>
+  );
 }
 
-ReactDOM.render(
-  //React.createElement(Button, null),
-  //same
-  <Button />,
-  document.getElementById("root")
-);
+ReactDOM.render(<Button />, document.getElementById("root"));
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
