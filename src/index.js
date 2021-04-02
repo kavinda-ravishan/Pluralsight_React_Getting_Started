@@ -23,10 +23,17 @@ function Display(props) {
   return <div>{props.message}</div>;
 }
 
+function DisplayTime(props) {
+  return <pre>{props.time}</pre>;
+}
+
 function App() {
   const [counter, setCounter] = useState(0);
   const incrementCounter = (incrementValue) =>
     setCounter(counter + incrementValue);
+
+  const [time, setTime] = useState(new Date().toLocaleTimeString());
+  setInterval(() => setTime(new Date().toLocaleTimeString()), 1000);
 
   return (
     <div>
@@ -35,6 +42,7 @@ function App() {
       <Button onClickFunction={incrementCounter} increment={10} />
       <Button onClickFunction={incrementCounter} increment={100} />
       <Display message={counter} />
+      <DisplayTime time={time} />
     </div>
   );
 }
