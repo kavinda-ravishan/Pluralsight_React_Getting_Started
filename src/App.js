@@ -1,81 +1,81 @@
 import React from "react";
 import "./App.css";
 
-const CardList = (props) => {
+const StarMatch = () => {
   return (
-    <div>
-      {props.profiles.map((profile, index) => (
-        <Card {...profile} key={index} />
-      ))}
+    <div className="game">
+      <div className="help">
+        Pick 1 or more numbers that sum to the number of stars
+      </div>
+      <div className="body">
+        <div className="left">
+          <div className="star" />
+          <div className="star" />
+          <div className="star" />
+          <div className="star" />
+          <div className="star" />
+          <div className="star" />
+          <div className="star" />
+          <div className="star" />
+          <div className="star" />
+        </div>
+        <div className="right">
+          <button className="number">1</button>
+          <button className="number">2</button>
+          <button className="number">3</button>
+          <button className="number">4</button>
+          <button className="number">5</button>
+          <button className="number">6</button>
+          <button className="number">7</button>
+          <button className="number">8</button>
+          <button className="number">9</button>
+        </div>
+      </div>
+      <div className="timer">Time Remaining: 10</div>
     </div>
   );
 };
 
-class Card extends React.Component {
-  render() {
-    const profile = this.props;
-    return (
-      <div className="github-profile">
-        <img alt="avatar" src={profile.avatar_url}></img>
-        <div className="info">
-          <div className="name">{profile.name}</div>
-          <div className="company">{profile.company}</div>
-        </div>
-      </div>
-    );
-  }
-}
-//TEST USER NAME = gaearon
-class Form extends React.Component {
-  state = { userName: "" };
-  handleSubmit = async (event) => {
-    event.preventDefault(); //prevent refresh page when submit
+// Color Theme
+const colors = {
+  available: "lightgray",
+  used: "lightgreen",
+  wrong: "lightcoral",
+  candidate: "deepskyblue",
+};
 
-    const res = await fetch(
-      `https://api.github.com/users/${this.state.userName}`
-    );
-    const jsonRes = await res.json();
+// Math science
+const utils = {
+  // Sum an array
+  sum: (arr) => arr.reduce((acc, curr) => acc + curr, 0),
 
-    this.props.onSubmit(jsonRes);
+  // create an array of numbers between min and max (edges included)
+  range: (min, max) => Array.from({ length: max - min + 1 }, (_, i) => min + i),
 
-    this.setState({ userName: "" }); //Reset user name value on input
-  };
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <input
-          type="text"
-          placeholder="GitHub username"
-          value={this.state.userName}
-          onChange={(event) => this.setState({ userName: event.target.value })}
-          required
-        />
-        <button>Add card</button>
-      </form>
-    );
-  }
-}
+  // pick a random number between min and max (edges included)
+  random: (min, max) => min + Math.floor(Math.random() * (max - min + 1)),
 
-class App extends React.Component {
-  state = {
-    profiles: [],
-  };
+  // Given an array of numbers and a max...
+  // Pick a random sum (< max) from the set of all available sums in arr
+  randomSumIn: (arr, max) => {
+    const sets = [[]];
+    const sums = [];
+    for (let i = 0; i < arr.length; i++) {
+      for (let j = 0, len = sets.length; j < len; j++) {
+        const candidateSet = sets[j].concat(arr[i]);
+        const candidateSum = utils.sum(candidateSet);
+        if (candidateSum <= max) {
+          sets.push(candidateSet);
+          sums.push(candidateSum);
+        }
+      }
+    }
+    return sums[utils.random(0, sums.length - 1)];
+  },
+};
 
-  addNewProfile = (profileData) => {
-    this.setState((prevState) => ({
-      profiles: [...prevState.profiles, profileData],
-    }));
-  };
-
-  render() {
-    return (
-      <div>
-        <div className="header">{this.props.title}</div>
-        <Form onSubmit={this.addNewProfile} />
-        <CardList profiles={this.state.profiles} />
-      </div>
-    );
-  }
-}
+const App = () => {
+  return <StarMatch />;
+};
 
 export default App;
