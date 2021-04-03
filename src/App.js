@@ -22,8 +22,9 @@ const testData = [
 const CardList = (props) => {
   return (
     <div>
-      <Card {...testData[0]} />
-      <Card {...testData[1]} />
+      {testData.map((profile) => (
+        <Card {...profile} />
+      ))}
     </div>
   );
 };
