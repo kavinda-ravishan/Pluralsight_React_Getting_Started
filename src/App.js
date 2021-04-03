@@ -45,10 +45,10 @@ class Card extends React.Component {
 }
 
 class Form extends React.Component {
-  userNameInput = React.createRef();
+  state = { userName: "" };
   handleSubmit = (event) => {
     event.preventDefault(); //prevent refresh page when submit
-    console.log(this.userNameInput.current.value);
+    console.log(this.state.userName);
   };
   render() {
     return (
@@ -56,8 +56,9 @@ class Form extends React.Component {
         <input
           type="text"
           placeholder="GitHub username"
+          value={this.state.userName}
+          onChange={(event) => this.setState({ userName: event.target.value })}
           required
-          ref={this.userNameInput}
         />
         <button>Add card</button>
       </form>
