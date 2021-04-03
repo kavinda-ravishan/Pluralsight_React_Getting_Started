@@ -37,6 +37,7 @@
 }
 
 .number {
+  cursor: pointer;
   background-color: #eee;
   border: thin solid #ddd;
   width: 45px;
