@@ -1,24 +1,6 @@
 import React from "react";
 import "./App.css";
 
-const testData = [
-  {
-    name: "Dan Abramov",
-    avatar_url: "https://avatars0.githubusercontent.com/u/810438?v=4",
-    company: "@facebook",
-  },
-  {
-    name: "Sophie Alpert",
-    avatar_url: "https://avatars2.githubusercontent.com/u/6820?v=4",
-    company: "Humu",
-  },
-  {
-    name: "Sebastian Markbåge",
-    avatar_url: "https://avatars2.githubusercontent.com/u/63648?v=4",
-    company: "Facebook",
-  },
-];
-
 const CardList = (props) => {
   return (
     <div>
@@ -43,12 +25,20 @@ class Card extends React.Component {
     );
   }
 }
-
+//TEST USER NAME = gaearon
 class Form extends React.Component {
   state = { userName: "" };
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault(); //prevent refresh page when submit
-    console.log(this.state.userName);
+
+    const res = await fetch(
+      `https://api.github.com/users/${this.state.userName}`
+    );
+    const jsonRes = await res.json();
+
+    this.props.onSubmit(jsonRes);
+
+    this.setState({ userName: "" }); //Reset user name value on input
   };
   render() {
     return (
@@ -68,14 +58,20 @@ class Form extends React.Component {
 
 class App extends React.Component {
   state = {
-    profiles: testData,
+    profiles: [],
+  };
+
+  addNewProfile = (profileData) => {
+    this.setState((prevState) => ({
+      profiles: [...prevState.profiles, profileData],
+    }));
   };
 
   render() {
     return (
       <div>
         <div className="header">{this.props.title}</div>
-        <Form />
+        <Form onSubmit={this.addNewProfile} />
         <CardList profiles={this.state.profiles} />
       </div>
     );
