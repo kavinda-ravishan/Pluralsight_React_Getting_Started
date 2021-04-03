@@ -1,4 +1,4 @@
-import React, { Profiler } from "react";
+import React from "react";
 import "./App.css";
 
 const testData = [
@@ -22,8 +22,8 @@ const testData = [
 const CardList = (props) => {
   return (
     <div>
-      {props.profiles.map((profile) => (
-        <Card {...profile} />
+      {props.profiles.map((profile, index) => (
+        <Card {...profile} key={index} />
       ))}
     </div>
   );
@@ -34,7 +34,7 @@ class Card extends React.Component {
     const profile = this.props;
     return (
       <div className="github-profile">
-        <img src={profile.avatar_url}></img>
+        <img alt="avatar" src={profile.avatar_url}></img>
         <div className="info">
           <div className="name">{profile.name}</div>
           <div className="company">{profile.company}</div>
@@ -45,10 +45,20 @@ class Card extends React.Component {
 }
 
 class Form extends React.Component {
+  userNameInput = React.createRef();
+  handleSubmit = (event) => {
+    event.preventDefault(); //prevent refresh page when submit
+    console.log(this.userNameInput.current.value);
+  };
   render() {
     return (
-      <form action="">
-        <input type="text" placeholder="GitHub username" />
+      <form onSubmit={this.handleSubmit}>
+        <input
+          type="text"
+          placeholder="GitHub username"
+          required
+          ref={this.userNameInput}
+        />
         <button>Add card</button>
       </form>
     );
@@ -56,15 +66,6 @@ class Form extends React.Component {
 }
 
 class App extends React.Component {
-  /*
-  constructor(props) {
-    super(props);
-    this.state = {
-      profiles: testData,
-    };
-  }
-  */
-  //or
   state = {
     profiles: testData,
   };
