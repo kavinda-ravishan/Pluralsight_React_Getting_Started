@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
 const StarsDisplay = (props) => {
@@ -37,6 +37,23 @@ const StarMatch = () => {
   const [stars, setStars] = useState(utils.random(1, 9));
   const [availableNumbers, setAvailableNumbers] = useState(utils.range(1, 9));
   const [candidateNumbers, setCandidateNumbers] = useState([]);
+  const [secondsLeft, setSecondsLeft] = useState(10);
+
+  useEffect(() => {
+    /*
+    if (secondsLeft > 0) {
+      setTimeout(() => {
+        setSecondsLeft(secondsLeft - 1);
+      }, 1000);
+    }
+    */
+
+    //Need to clean up
+    console.log("Done rendering.");
+    return () => {
+      console.log("Component is going to rerender.");
+    };
+  });
 
   const candidatesAreWrong = utils.sum(candidateNumbers) > stars;
   const gameIsDone = availableNumbers.length === 0;
@@ -97,7 +114,7 @@ const StarMatch = () => {
           ))}
         </div>
       </div>
-      <div className="timer">Time Remaining: 10</div>
+      <div className="timer">Time Remaining: {secondsLeft}</div>
     </div>
   );
 };
