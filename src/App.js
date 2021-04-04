@@ -28,6 +28,12 @@ const PlayNumber = (props) => {
 const PlayAgain = (props) => {
   return (
     <div className="game-done">
+      <div
+        className="message"
+        style={{ color: props.gameStatus === "lost" ? "red" : "green" }}
+      >
+        {props.gameStatus === "lost" ? "Game Over" : "You Won"}
+      </div>
       <button onClick={props.onClick}>Play Again</button>
     </div>
   );
@@ -40,28 +46,32 @@ const StarMatch = () => {
   const [secondsLeft, setSecondsLeft] = useState(10);
 
   useEffect(() => {
-    /*
-    if (secondsLeft > 0) {
-      setTimeout(() => {
+    if (secondsLeft > 0 && availableNumbers.length > 0) {
+      const timerID = setTimeout(() => {
         setSecondsLeft(secondsLeft - 1);
       }, 1000);
-    }
-    */
 
-    //Need to clean up
-    console.log("Done rendering.");
-    return () => {
-      console.log("Component is going to rerender.");
-    };
+      //clear the timer
+      return () => {
+        clearTimeout(timerID);
+      };
+    }
   });
 
   const candidatesAreWrong = utils.sum(candidateNumbers) > stars;
-  const gameIsDone = availableNumbers.length === 0;
+
+  const gameStatus =
+    availableNumbers.length === 0
+      ? "won"
+      : secondsLeft === 0
+      ? "lost"
+      : "active";
 
   const resetGame = () => {
     setStars(utils.random(1, 9));
     setAvailableNumbers(utils.range(1, 9));
     setCandidateNumbers([]);
+    setSecondsLeft(10);
   };
 
   const numberStatus = (number) => {
@@ -72,7 +82,7 @@ const StarMatch = () => {
   };
 
   const onNumberClick = (number, currentStatus) => {
-    if (currentStatus === "used") return;
+    if (currentStatus === "used" || gameStatus !== "active") return;
     const newCandidateNumbers =
       currentStatus === "available"
         ? candidateNumbers.concat(number)
@@ -97,8 +107,8 @@ const StarMatch = () => {
       </div>
       <div className="body">
         <div className="left">
-          {gameIsDone ? (
-            <PlayAgain onClick={resetGame} />
+          {gameStatus !== "active" ? (
+            <PlayAgain onClick={resetGame} gameStatus={gameStatus} />
           ) : (
             <StarsDisplay count={stars} />
           )}
